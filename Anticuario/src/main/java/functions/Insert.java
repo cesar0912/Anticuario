@@ -1,5 +1,9 @@
 package functions;
 
-public class Insert {
+import org.bson.Document;
 
+public class Insert {
+	public static void addToMongo(Document document) {
+		
+	}
 }
