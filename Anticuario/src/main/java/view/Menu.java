@@ -32,14 +32,13 @@ public class Menu {
 	}
 
 	public static void add() {
-		
-		System.out.println("Insertelo en este formato(tipo:dato) es necesario insertar un nombre");
 		Document document=new Document();
 		Document subDocument=new Document();
 		System.out.println("tipo?");
 		String dato=IO.readString();
 		System.out.println("¿Cuantos datos quiere añadir?");
 		int cant = IO.readInt();
+		System.out.println("Insertelo en este formato(tipo:dato)");
 		for(int i=0;i<cant;i++) {
 			String datos[]=IO.readString().split(":");
 			subDocument.append(datos[0],datos[1]);
