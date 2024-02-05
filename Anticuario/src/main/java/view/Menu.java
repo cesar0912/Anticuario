@@ -5,6 +5,8 @@ import java.util.List;
 import org.bson.Document;
 
 import dao.MongoDB;
+import functions.Delete;
+import functions.Find;
 import functions.Insert;
 import io.IO;
 
@@ -34,8 +36,18 @@ public class Menu {
 	public static void add() {
 		Document document=new Document();
 		Document subDocument=new Document();
-		System.out.println("tipo?");
-		String dato=IO.readString();
+		
+		// Datos generales
+		System.out.println("Introduzca el nombre del producto");
+		String datoNombre=IO.readString();
+		System.out.println("Introduzca su tipo");
+		String datoTipo=IO.readString();
+		System.out.println("Introduzca su precio");
+		String datoPrecio=IO.readString();
+
+		
+		// Datos suplementarios
+		//TODO Cambiar for por while
 		System.out.println("¿Cuantos datos quiere añadir?");
 		int cant = IO.readInt();
 		System.out.println("Insertelo en este formato(tipo:dato)");
@@ -43,12 +55,33 @@ public class Menu {
 			String datos[]=IO.readString().split(":");
 			subDocument.append(datos[0],datos[1]);
 		}
-		document.append("tipo", dato).append("propiedades", subDocument);
+		
+		if (cant > 0) {
+			document.append("nombre", datoNombre).append("tipo", datoTipo).append("precio", datoPrecio).append("propiedades", subDocument);
+		} else {
+			document.append("nombre", datoNombre).append("tipo", datoTipo).append("precio", datoPrecio);
+		}
+		
+		
 		Insert.addToMongo(document);
 		MongoDB.getClient();
 	}
 
 	public static void find() {
+		Document document=new Document();
+		Document subDocument=new Document();
+		
+		System.out.println("1: Buscar por dato  2: Buscar todo");
+		
+		switch (IO.readInt()) {
+			case 1:
+				break;
+				
+			case 2:
+				Find.FindAll();
+				break;
+			
+		}
 
 	}
 
@@ -57,6 +90,43 @@ public class Menu {
 	}
 
 	public static void delete() {
+		Document document = new Document();
+		Document subDocument = new Document();
+		
+		System.out.println("1: Borrar un artículo concreto  2: Borrar por datos  3: Borrar por valor del dato");
+		
+		switch (IO.readInt()) {
+			case 1:
+				System.out.println("Introduzca el id del producto a borrar");
+				String id = IO.readString();
+				
+				Delete.deleteByID(id);
+				break;
+			
+			case 2: 
+				System.out.println("Introduzca el tipo de dato que quiere borrar");
+				String dato = IO.readString();
+				
+				Delete.deleteByKey(dato);
+				break;
+				
+			case 3:
+				System.out.println("Cuántos datos quieres introducir para filtrar el borrado");
+				int cant = IO.readInt();
 
+				System.out.println("Formato(tipo:dato)");
+				for(int i=0;i<cant;i++) {
+					String datos[]=IO.readString().split(":");
+					subDocument.append(datos[0],datos[1]);
+				}
+				
+				Delete.deleteByValues(subDocument);
+				break;
+	
+			default:
+		}
+		
+		MongoDB.getClient();
+		
 	}
 }
