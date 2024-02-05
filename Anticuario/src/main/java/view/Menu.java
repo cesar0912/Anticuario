@@ -15,7 +15,7 @@ public class Menu {
 
 		List<String> opciones = List.of("1: Añadir producto", "2: Buscar producto", "3: Modificar producto",
 				"4: Eliminar producto");
-
+		MongoDB.getClient();
 		while (true) {
 			System.out.println(opciones);
 			switch (IO.readInt()) {
@@ -50,13 +50,14 @@ public class Menu {
 		//TODO Cambiar for por while
 		System.out.println("¿Cuantos datos quiere añadir?");
 		int cant = IO.readInt();
+		if (cant > 0) {
 		System.out.println("Insertelo en este formato(tipo:dato)");
 		for(int i=0;i<cant;i++) {
 			String datos[]=IO.readString().split(":");
 			subDocument.append(datos[0],datos[1]);
 		}
 		
-		if (cant > 0) {
+		
 			document.append("nombre", datoNombre).append("tipo", datoTipo).append("precio", datoPrecio).append("propiedades", subDocument);
 		} else {
 			document.append("nombre", datoNombre).append("tipo", datoTipo).append("precio", datoPrecio);
@@ -64,7 +65,6 @@ public class Menu {
 		
 		
 		Insert.addToMongo(document);
-		MongoDB.getClient();
 	}
 
 	public static void find() {
@@ -126,7 +126,6 @@ public class Menu {
 			default:
 		}
 		
-		MongoDB.getClient();
 		
 	}
 }

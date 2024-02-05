@@ -18,7 +18,8 @@ public class Delete {
 
 	// Borra objeto por ID
 	public static void deleteByID(String id) {
-		try (MongoClient mongoClient = MongoDB.getClient()) {
+		try {
+            MongoClient mongoClient = MongoDB.getClient();
             MongoDatabase database = mongoClient.getDatabase("Anticuario");
             MongoCollection<Document> collection = database.getCollection("Productos");
 
@@ -43,7 +44,8 @@ public class Delete {
 	
 	// Borra objetos que posean una key concreta
 	public static void deleteByKey(String dato) {
-		try (MongoClient mongoClient = MongoDB.getClient()) {
+		try {
+            MongoClient mongoClient = MongoDB.getClient();
             MongoDatabase database = mongoClient.getDatabase("Anticuario");
             MongoCollection<Document> collection = database.getCollection("Productos");
 
@@ -59,7 +61,8 @@ public class Delete {
 	
 	// Borra objetos que posean unos values concretos
 	public static void deleteByValues(Document document) {
-		try (MongoClient mongoClient = MongoDB.getClient()) {
+		try {
+            MongoClient mongoClient = MongoDB.getClient();
             MongoDatabase database = mongoClient.getDatabase("Anticuario");
             MongoCollection<Document> collection = database.getCollection("Productos");
             

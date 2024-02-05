@@ -15,7 +15,8 @@ import dao.MongoDB;
 
 public class Find {
 	public static void FindAll() {
-		try (MongoClient mongoClient = MongoDB.getClient()) {
+		try {
+            MongoClient mongoClient = MongoDB.getClient();
             MongoDatabase database = mongoClient.getDatabase("Anticuario");
             MongoCollection<Document> collection = database.getCollection("Productos");
             
