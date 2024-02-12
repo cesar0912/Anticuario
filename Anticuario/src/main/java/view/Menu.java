@@ -1,13 +1,18 @@
 package view;
 
 import java.util.List;
+import java.util.Set;
 
 import org.bson.Document;
+import org.bson.conversions.Bson;
+
+import com.mongodb.client.MongoCursor;
 
 import dao.MongoDB;
 import functions.Delete;
 import functions.Find;
 import functions.Insert;
+import functions.Modify;
 import io.IO;
 
 public class Menu {
@@ -87,6 +92,37 @@ public class Menu {
 
 	public static void modify() {
 
+		Document document=new Document();
+		Document subDocument=new Document();
+		System.out.println("Introduzca el id del producto a modificar");
+		String id = IO.readString();
+		Document found=Modify.findById(id);
+		
+		if (found!=null) {
+			System.out.println(Find.pretty(found.toJson()));
+            Document encontrado=Modify.modifyById(id);
+            Set<String> campos = encontrado.keySet();
+            System.out.println("Campos del documento a modificar:");
+            String dato;
+            System.out.println("Introduzca el nombre del producto");
+    		String datoNombre=IO.readString();
+    		System.out.println("Introduzca su tipo");
+    		String datoTipo=IO.readString();
+    		System.out.println("Introduzca su precio");
+    		String datoPrecio=IO.readString();
+            for (String campo : campos) {
+            	
+            	System.out.println("Inserte "+campo);
+        		dato=IO.readString();
+        		subDocument.append(campo,dato);
+        			
+        			
+            }
+            document.append("nombre", datoNombre).append("tipo", datoTipo).append("precio", datoPrecio).append("propiedades", subDocument);
+            Modify.modify(found,document);
+        } else {
+            System.out.println("Documento no encontrado.");
+        }
 	}
 
 	public static void delete() {
@@ -104,7 +140,7 @@ public class Menu {
 				break;
 			
 			case 2: 
-				System.out.println("Introduzca el tipo de dato que quiere borrar");
+				System.out.println("Introduzca la clasificacion que quiere borrar");
 				String dato = IO.readString();
 				
 				Delete.deleteByKey(dato);
@@ -116,11 +152,24 @@ public class Menu {
 
 				System.out.println("Formato(tipo:dato)");
 				for(int i=0;i<cant;i++) {
+					
 					String datos[]=IO.readString().split(":");
-					subDocument.append(datos[0],datos[1]);
+					switch(datos[0]) {
+					case "nombre":document.append(datos[0],datos[1]);
+						break;
+					case "tipo":document.append(datos[0],datos[1]);
+						break;
+					case "precio":document.append(datos[0],datos[1]);
+						break;
+					default:
+						subDocument.append(datos[0],datos[1]);
+						break;
+						
+					}
+					
 				}
-				
-				Delete.deleteByValues(subDocument);
+				document.append("propiedades", subDocument);
+				Delete.deleteByValues(document);
 				break;
 	
 			default:

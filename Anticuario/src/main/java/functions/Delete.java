@@ -65,9 +65,7 @@ public class Delete {
             MongoClient mongoClient = MongoDB.getClient();
             MongoDatabase database = mongoClient.getDatabase("Anticuario");
             MongoCollection<Document> collection = database.getCollection("Productos");
-            
-            
-
+            collection.deleteMany(document);
             System.out.println("Documentos borrados correctamente en MongoDB.");
         } catch (Exception e) {
             e.printStackTrace();
