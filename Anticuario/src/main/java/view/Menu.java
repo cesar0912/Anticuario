@@ -118,7 +118,10 @@ public class Menu {
         			
         			
             }
+            if(campos!=null)
             document.append("nombre", datoNombre).append("tipo", datoTipo).append("precio", datoPrecio).append("propiedades", subDocument);
+            else
+            document.append("nombre", datoNombre).append("tipo", datoTipo).append("precio", datoPrecio);
             Modify.modify(found,document);
         } else {
             System.out.println("Documento no encontrado.");
