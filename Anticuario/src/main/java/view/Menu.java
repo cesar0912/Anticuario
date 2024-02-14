@@ -73,13 +73,13 @@ public class Menu {
 	}
 
 	public static void find() {
-		Document document=new Document();
-		Document subDocument=new Document();
 		
 		System.out.println("1: Buscar por dato  2: Buscar todo");
 		
 		switch (IO.readInt()) {
-			case 1:
+			case 1:System.out.println("Pon el dato por el que quieres filtrar");
+				String dato=IO.readString();
+				Find.FindField(dato);
 				break;
 				
 			case 2:
