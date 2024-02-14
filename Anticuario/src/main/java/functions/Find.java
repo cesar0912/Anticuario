@@ -29,8 +29,8 @@ public class Find {
             Iterator<Document> iterator;
             if (dato.contains(":")) {
                 String[] datos = dato.split(":");
-                String campo = datos[0].trim();
-                String valor = datos[1].trim();
+                String campo = datos[0];
+                String valor = datos[1];
                 if(!campo.equals("nombre") && !campo.equals("tipo") && !campo.equals("precio")) {
                 	iterable = collection.find(Filters.eq("propiedades."+campo, valor));
                 }else {
@@ -58,7 +58,7 @@ public class Find {
             	            // Verificar si el valor es una cadena y si contiene el dato buscado
             	            if (propValue instanceof String) {
             	                String propStringValue = (String) propValue;
-            	                if (propStringValue.contains(dato) || propKey.contains(dato)) {
+            	                if (propStringValue.equals(dato) || propKey.equals(dato)) {
             	                    System.out.println(pretty(document.toJson()));
             	                    escrito=true;
             	                    break; // Romper el bucle interno si se encuentra una coincidencia
@@ -72,7 +72,7 @@ public class Find {
 	            	        Object value = document.get(key);
 	            	        if (value instanceof String) {
 	            	            String stringValue = (String) value;
-	            	            if (stringValue.contains(dato) || key.contains(dato)) {
+	            	            if (stringValue.equals(dato) || key.equals(dato)) {
 	            	                System.out.println(pretty(document.toJson()));
 	            	                break; // Romper el bucle interno si se encuentra una coincidencia
 	            	            }
@@ -85,17 +85,6 @@ public class Find {
             e.printStackTrace();
         }
     
-    }
-
-    // Método auxiliar para verificar si un índice de texto existe para un campo dado
-    private static boolean hasTextIndex(MongoCollection<Document> collection, String campo) {
-        for (Document index : collection.listIndexes()) {
-            Document key = (Document) index.get("key");
-            if (key.containsKey(campo) && key.get(campo).equals("text")) {
-                return true;
-            }
-        }
-        return false;
     }
 
 	public static void FindAll() {
