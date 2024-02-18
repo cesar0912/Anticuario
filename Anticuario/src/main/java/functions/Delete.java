@@ -1,5 +1,8 @@
 package functions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
@@ -48,9 +51,13 @@ public class Delete {
             MongoClient mongoClient = MongoDB.getClient();
             MongoDatabase database = mongoClient.getDatabase("Anticuario");
             MongoCollection<Document> collection = database.getCollection("Productos");
-
-            Document filter = new Document("propiedades." + dato, new Document("$exists", true));
-            collection.deleteMany(filter);
+            if(!dato.equals("nombre") || !dato.equals("tipo") || !dato.equals("precio")) {
+            	Document filter = new Document("propiedades." + dato, new Document("$exists", true));
+            	collection.deleteMany(filter);
+            }else {
+            	Document filter = new Document(dato, new Document("$exists", true));
+            	collection.deleteMany(filter);
+            }
 
             System.out.println("Documentos borrados correctamente en MongoDB.");
         } catch (Exception e) {
@@ -61,15 +68,23 @@ public class Delete {
 	
 	// Borra objetos que posean unos values concretos
 	public static void deleteByValues(Document document) {
-		try {
-            MongoClient mongoClient = MongoDB.getClient();
-            MongoDatabase database = mongoClient.getDatabase("Anticuario");
-            MongoCollection<Document> collection = database.getCollection("Productos");
-            collection.deleteMany(document);
-            System.out.println("Documentos borrados correctamente en MongoDB.");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+	    try {
+	        MongoClient mongoClient = MongoDB.getClient();
+	        MongoDatabase database = mongoClient.getDatabase("Anticuario");
+	        MongoCollection<Document> collection = database.getCollection("Productos");
+
+	        List<Bson> filters = new ArrayList<>();
+	        for (String key : document.keySet()) {
+	            filters.add(Filters.eq(key, document.get(key)));
+	        }
+	        
+	        Bson filter = Filters.or(filters);
+	        collection.deleteMany(filter);
+
+	        System.out.println("Documentos borrados correctamente en MongoDB.");
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
 	}
 	
 }
